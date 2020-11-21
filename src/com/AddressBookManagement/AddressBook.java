@@ -41,7 +41,7 @@ public class AddressBook {
 
     }
 
-    /* UC2: Edit Person Details*/
+    /* UC3: Edit Person Details*/
     public void editPerson()
     {
         System.out.println("\n___Edit the Person Using Name___");
