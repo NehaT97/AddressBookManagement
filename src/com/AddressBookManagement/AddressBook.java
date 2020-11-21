@@ -114,6 +114,39 @@ public class AddressBook {
         }
     }
 
+    /*UC4 : Delete Person Using Name*/
+    public void deletePerson()
+    {
+        System.out.println("Delete Person Using FirstName And LastName");
+        String firstName=sc.nextLine();
+        System.out.println("\nLastName");
+        String lastName = sc.nextLine();
+
+        for (int i=0;i<addressbooklist.size();i++)
+        {
+            Person person=(Person) addressbooklist.get(i);
+            if ((person.getFirstname().equals(firstName))&& (person.getLastname().equals(lastName)));
+            System.out.println("Details Found!!"+person.getFirstname() +person.getLastname());
+            addressbooklist.remove(i);
+            Display();
+            System.out.println("Contact Deleted Successfully:");
+        }
+    }
+
+    /*Display Function to Show AddressBook Data*/
+    public void Display()
+    {
+        System.out.println("\nDISPLAYING ADDRESS BOOK DATA");
+        for (int i=0; i<addressbooklist.size(); i++)
+        {
+            System.out.println(addressbooklist.get(i));
+        }
+
+    }
+    @Override
+    protected void finalize(){
+        sc.close();
+    }
 
     public static void main(String []args)
     {
@@ -121,6 +154,8 @@ public class AddressBook {
         System.out.println("WELCOME TO ADDRESS BOOK MANAGEMENT");
         addressBook.addPerson();
         addressBook.editPerson();
+        addressBook.deletePerson();
+        addressBook.Display();
     }
 
 
