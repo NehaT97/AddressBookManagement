@@ -5,6 +5,7 @@ import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AddressBook {
@@ -89,7 +90,7 @@ public class AddressBook {
         }
     }
 
-    /* UC8: Search Person By City_State */
+    /* UC8: Search Person By City_State And View Data */
     public void searchPerson_By_City_State() {
         sc = new Scanner(System.in);
         Stream<ArrayList> stream = Stream.of(addressbooklist);
@@ -109,7 +110,12 @@ public class AddressBook {
                 .filter(addressbooklist -> !addressbooklist.getState().equals(state));
 
         System.out.println("Sorry Data Not Found Related to City or State");
+    }
 
+    /* UC10: Count By City And State */
+    public void countByCity_State() {
+        System.out.println(addressbooklist.stream().collect(Collectors.groupingBy((Person p) -> p.getCity(), Collectors.counting())));
+        System.out.println(addressbooklist.stream().collect(Collectors.groupingBy((Person p) -> p.getState(), Collectors.counting())));
     }
 
     /* UC3: Edit Person Details*/
@@ -234,7 +240,8 @@ public class AddressBook {
                                 "\n" + "3].Delete Person" +
                                 "\n" + "4].Display" +
                                 "\n" + "5].Search_Person_By_City_State" +
-                                "\n" + "6].Quit");
+                                "\n" + "6].Count_Person_By_City_State" +
+                                "\n" + "7].Quit");
 
                         System.out.println("\n" + "Enter the choice:");
                         int ch1 = sc.nextInt();
@@ -265,6 +272,11 @@ public class AddressBook {
                                 break;
 
                             case 6:
+                                System.out.println("WELCOME TO COUNT OPERATION");
+                                addressBook.countByCity_State();
+                                break;
+
+                            case 7:
                                 loop1 = 0;
 
                             default:
