@@ -1,7 +1,11 @@
 package com.AddressBookManagement;
 
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class AddressBook {
     private Scanner sc;
@@ -83,6 +87,29 @@ public class AddressBook {
                 System.out.println("Person is Added");
             }
         }
+    }
+
+    /* UC8: Search Person By City_State */
+    public void searchPerson_By_City_State() {
+        sc = new Scanner(System.in);
+        Stream<ArrayList> stream = Stream.of(addressbooklist);
+        stream.forEach(System.out::println);
+
+        System.out.println("Enter City To Search Person");
+        String city = sc.nextLine();
+        System.out.println("Enter State To Search Person");
+        String state = sc.nextLine();
+        addressbooklist.stream()
+                .filter(addressbooklist -> addressbooklist.getCity().equals(city))
+                .filter(addressbooklist -> addressbooklist.getState().equals(state))
+                .forEach(addressBookList1 -> System.out.println(addressBookList1));
+
+        addressbooklist.stream()
+                .filter(addressbooklist -> !addressbooklist.getCity().equals(city))
+                .filter(addressbooklist -> !addressbooklist.getState().equals(state));
+
+        System.out.println("Sorry Data Not Found Related to City or State");
+
     }
 
     /* UC3: Edit Person Details*/
@@ -206,7 +233,8 @@ public class AddressBook {
                                 "\n" + "2].Edit Person" +
                                 "\n" + "3].Delete Person" +
                                 "\n" + "4].Display" +
-                                "\n" + "5].Quit" );
+                                "\n" + "5].Search_Person_By_City_State" +
+                                "\n" + "6].Quit");
 
                         System.out.println("\n" + "Enter the choice:");
                         int ch1 = sc.nextInt();
@@ -232,6 +260,11 @@ public class AddressBook {
                                 break;
 
                             case 5:
+                                System.out.println("WELCOME TO SEARCH OPERATION");
+                                addressBook.searchPerson_By_City_State();
+                                break;
+
+                            case 6:
                                 loop1 = 0;
 
                             default:
@@ -250,4 +283,6 @@ public class AddressBook {
         }
 
     }
+
+
 }
