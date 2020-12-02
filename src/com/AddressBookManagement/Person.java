@@ -2,7 +2,6 @@ package com.AddressBookManagement;
 
 public class Person
 {
-
     private String firstname;
     private String lastname;
     private String contactno;

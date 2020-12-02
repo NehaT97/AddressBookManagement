@@ -1,107 +1,47 @@
 package com.AddressBookManagement;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
+
+import java.io.*;
+import java.util.*;
 
 public class AddressBook {
-
     private Scanner sc;
-    static String bookname;
-    public static ArrayList<Person> addressbooklist = new ArrayList();
-    final String CSV_HEADER = "FirstName,LastName,ContactNumber,City,State,Zip";
+    public static ArrayList<Person> addressbooklist = new ArrayList<Person>();
+    ArrayList<AddressBookList> stackofaddressbook = new ArrayList<>();
 
-    private void CreateNewAddressBook() {
-        sc=new Scanner(System.in);
+    private void createNewAddressBook() {
+        sc = new Scanner(System.in);
         System.out.println("!!! Create Address Book Here !!!");
         System.out.println("\nEnter Address Book Name");
-        String filename = sc.nextLine();
-        try {
+        String addressBookName = sc.nextLine();
 
-            File file = new File("E:\\BRIDGE_FELLOWSHIP\\AddressBook\\MultipleAddressBook\\" + filename + ".csv");
-            if (file.createNewFile()) {
-                System.out.println("\nAddress Book is created : " + file.getName());
-            } else {
-                System.out.println("\nAddress Book Already Exist");
-            }
+        AddressBookList bookList = new AddressBookList(addressBookName);
+        stackofaddressbook.add(bookList);
+        System.out.println("Address Book Is Created :" + stackofaddressbook.toString());
 
-        } catch (IOException e) {
-            System.out.println("\nError Occurred During Creation");
-            e.printStackTrace();
-        }
     }
 
-    public void OpenAddressBook() {
-        sc=new Scanner(System.in);
-        System.out.println("\n" + "!!! You Can Opened Any Address Book !!!");
+    public void displayAddressBookList() {
         System.out.println("\nAll AddressBook List");
-        File file = new File("E:\\BRIDGE_FELLOWSHIP\\AddressBook\\MultipleAddressBook\\");
-        File[] filelist = file.listFiles();
-        for (File f : filelist) {
-            if (f.getName().contains(".csv"))
-                System.out.println(f.getName());
+        for (int i = 0; i < stackofaddressbook.size(); i++) {
+            System.out.println(stackofaddressbook.get(i));
         }
-
-        System.out.println("\nEnter the Addressbook To Open");
-        String bookname = sc.nextLine();
-        boolean filefound = false;
-        for (File f : filelist) {
-            if (f.getName().equals(bookname)) {
-                filefound = true;
-                System.out.println("[" + f.getName() + " is Opened ]");
-
-            }
-        }
-        if (filefound == false) {
-            System.out.println("\n!! AddressBook Not found.First Create it !!");
-        }
-
     }
 
-    public void SaveAddressBook ()  {
-       System.out.println("Here you can Save the data in Address book");
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(bookname);
-            writer.append(CSV_HEADER);
-            writer.append("\n");
-            for (Person p : AddressBook.addressbooklist)
-            {
-                writer.append(p.getFirstname());
-                writer.append(",");
-                writer.append(p.getLastname());
-                writer.append(",");
-                writer.append(p.getContactno());
-                writer.append(",");
-                writer.append(p.getEmailid());
-                writer.append(",");
-                writer.append(p.getCity());
-                writer.append(",");
-                writer.append(p.getState());
-                writer.append(",");
-                writer.append(p.getZip());
-                writer.append("\n");
-            }
-            System.out.println("Data Saved....");
-
-        } catch (IOException e) {
-            System.out.println("!! Writing CSV Error !!");
-            e.printStackTrace();
-        }finally {
-            try {
-                writer.flush();
-                writer.close();
-            } catch (IOException e) {
-                System.out.println("Flushing/closing error!");
-                e.printStackTrace();
+    public void openAddressBook() throws IOException {
+        sc = new Scanner(System.in);
+        displayAddressBookList();
+        System.out.println("Enter The Name to Open AddressBook:");
+        String bookname = sc.nextLine();
+        for (AddressBookList list : stackofaddressbook) {
+            if (bookname.equals(list.getAddressBookName())) {
+                System.out.println("AddressBook " + list.getAddressBookName() + " Is Opened ");
             }
         }
     }
 
     /*UC2: Add Person Details In AddressBook*/
     public void addPerson() {
-        sc=new Scanner(System.in);
+        sc = new Scanner(System.in);
         System.out.println("\nEnter the FirstName");
         String firstname = sc.nextLine();
 
@@ -206,7 +146,7 @@ public class AddressBook {
             if ((person.getFirstname().equals(firstName)) && (person.getLastname().equals(lastName))) ;
             System.out.println("Details Found!!" + person.getFirstname() + person.getLastname());
             addressbooklist.remove(i);
-            Display();
+            //Display();
             System.out.println("Contact Deleted Successfully:");
         }
     }
@@ -224,28 +164,29 @@ public class AddressBook {
         sc.close();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
+        String addressBookName;
         AddressBook addressBook = new AddressBook();
+        //AddressBookManagement addressBookManagement = new AddressBookManagement();
         int loop = 1;
         while (loop == 1) {
             System.out.println("\n-----WELCOME TO ADDRESS BOOK MANAGEMENT-----");
             System.out.println("\n" + "ADDRESS BOOK MENU" + "\n"
                     + "1].Create address Book" + "\n"
                     + "2].Open Existing address book" + "\n"
-                    + "3].Save Address Book" + "\n"
-                    + "4].Quit");
+                    + "3].Quit");
             System.out.println("\nSelect any one choice");
             int choice = sc.nextInt();
             switch (choice) {
                 case 1:
-                    addressBook.CreateNewAddressBook();
+                    addressBook.createNewAddressBook();
                     break;
 
                 case 2:
-                    addressBook.OpenAddressBook();
-                    int loop1=1;
-                    while (loop1==1) {
+                    addressBook.openAddressBook();
+                    int loop1 = 1;
+                    while (loop1 == 1) {
                         System.out.println("\nADD PERSON DETAILS");
                         System.out.println("1].Add Person" +
                                 "\n" + "2].Edit Person" +
@@ -287,7 +228,7 @@ public class AddressBook {
                     break;
 
                 case 3:
-                    addressBook.SaveAddressBook();
+                    //addressBook.SaveAddressBook();
                     break;
 
                 case 4:
@@ -295,8 +236,9 @@ public class AddressBook {
 
                 default:
                     System.out.println("Back To Main Menu : Wrong Choice!!!");
-
             }
+
         }
+
     }
 }
