@@ -8,6 +8,7 @@ public class AddressBook {
     public static ArrayList<Person> addressbooklist = new ArrayList<Person>();
     ArrayList<AddressBookList> stackofaddressbook = new ArrayList<>();
 
+    /* UC6: Add Multiple AddressBook*/
     private void createNewAddressBook() {
         sc = new Scanner(System.in);
         System.out.println("!!! Create Address Book Here !!!");
@@ -44,6 +45,7 @@ public class AddressBook {
         sc = new Scanner(System.in);
         System.out.println("\nEnter the FirstName");
         String firstname = sc.nextLine();
+        duplicateNameCheck(firstname);
 
         System.out.println("Enter the LastName");
         String lastname = sc.nextLine();
@@ -69,6 +71,18 @@ public class AddressBook {
         Person p = new Person(firstname, lastname, contactno, emailid, address, city, state, zip);
         addressbooklist.add(p);
         System.out.println("AddressBook Data:" + addressbooklist);
+    }
+
+    /* UC7: To Check Duplicate Name Is Present */
+    public void duplicateNameCheck(String firstname) {
+        for (Person person : addressbooklist) {
+            if (person.getFirstname().equals(firstname)) {
+                System.out.println("Person " + firstname + "is present , add another Person");
+                addPerson();
+            } else {
+                System.out.println("Person is Added");
+            }
+        }
     }
 
     /* UC3: Edit Person Details*/
@@ -192,7 +206,7 @@ public class AddressBook {
                                 "\n" + "2].Edit Person" +
                                 "\n" + "3].Delete Person" +
                                 "\n" + "4].Display" +
-                                "\n" + "5].Quit");
+                                "\n" + "5].Quit" );
 
                         System.out.println("\n" + "Enter the choice:");
                         int ch1 = sc.nextInt();
@@ -220,7 +234,6 @@ public class AddressBook {
                             case 5:
                                 loop1 = 0;
 
-
                             default:
                                 System.out.println(" Back To Main Menu!!!");
                         }
@@ -228,10 +241,6 @@ public class AddressBook {
                     break;
 
                 case 3:
-                    //addressBook.SaveAddressBook();
-                    break;
-
-                case 4:
                     loop = 0;
 
                 default:
