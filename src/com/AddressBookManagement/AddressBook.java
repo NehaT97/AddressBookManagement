@@ -118,6 +118,14 @@ public class AddressBook {
         System.out.println(addressbooklist.stream().collect(Collectors.groupingBy((Person p) -> p.getState(), Collectors.counting())));
     }
 
+    /* UC11: Sort Persons Details By Name*/
+    public void sortPersonsDetailsByName() {
+        addressbooklist.stream();
+        addressbooklist.sort(Comparator.comparing(Person::getFirstname));
+        addressbooklist.forEach(System.out::println);
+
+    }
+
     /* UC3: Edit Person Details*/
     public void editPerson() {
         sc = new Scanner(System.in);
@@ -241,7 +249,8 @@ public class AddressBook {
                                 "\n" + "4].Display" +
                                 "\n" + "5].Search_Person_By_City_State" +
                                 "\n" + "6].Count_Person_By_City_State" +
-                                "\n" + "7].Quit");
+                                "\n" + "7].Sort_Person_Details_By_Name" +
+                                "\n" + "8].Quit");
 
                         System.out.println("\n" + "Enter the choice:");
                         int ch1 = sc.nextInt();
@@ -277,6 +286,11 @@ public class AddressBook {
                                 break;
 
                             case 7:
+                                System.out.println("WELCOME TO SORT BY NAME OPERATION");
+                                addressBook.sortPersonsDetailsByName();
+                                break;
+
+                            case 8:
                                 loop1 = 0;
 
                             default:
