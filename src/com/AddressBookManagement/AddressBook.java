@@ -126,6 +126,22 @@ public class AddressBook {
 
     }
 
+    /* UC12: Sort By City, State And Zip*/
+    public void sortByCity_State_Zip() {
+        addressbooklist.stream();
+
+        Comparator<Person> CompareByCityStateZip = Comparator.comparing(Person::getCity)
+                .thenComparing(Person::getState)
+                .thenComparing(Person::getZip);
+
+        List<Person> sortedPersonsData = addressbooklist.stream()
+                .sorted(CompareByCityStateZip)
+                .collect(Collectors.toList());
+
+        System.out.println("Sorted Data :" + sortedPersonsData);
+
+    }
+
     /* UC3: Edit Person Details*/
     public void editPerson() {
         sc = new Scanner(System.in);
@@ -250,7 +266,8 @@ public class AddressBook {
                                 "\n" + "5].Search_Person_By_City_State" +
                                 "\n" + "6].Count_Person_By_City_State" +
                                 "\n" + "7].Sort_Person_Details_By_Name" +
-                                "\n" + "8].Quit");
+                                "\n" + "8].Sort_Person_Details_By_CityStateZip" +
+                                "\n" + "9].Quit");
 
                         System.out.println("\n" + "Enter the choice:");
                         int ch1 = sc.nextInt();
@@ -291,6 +308,11 @@ public class AddressBook {
                                 break;
 
                             case 8:
+                                System.out.println("WELCOME TO SORT BY CITY_STatE_ZIP OPERATION");
+                                addressBook.sortByCity_State_Zip();
+                                break;
+
+                            case 9:
                                 loop1 = 0;
 
                             default:
