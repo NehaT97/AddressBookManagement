@@ -1,2 +1,0 @@
-First Name	Last Name	Email	Address	City	State	Zip	Phone Number	
-neha		thakur		fhggj	jjbk	hhkhk	hh	hh	khhk

@@ -1,10 +1,14 @@
 package com.AddressBookManagement;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-import org.w3c.dom.ls.LSOutput;
-
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,6 +16,93 @@ public class AddressBook {
     private Scanner sc;
     public static ArrayList<Person> addressbooklist = new ArrayList<Person>();
     ArrayList<AddressBookList> stackofaddressbook = new ArrayList<>();
+    static String HEADINGS = "FirstName,LastName,ContactNo,EmailId,Address,City,State,Zip";
+    static String filename;
+    //static String bookname="";
+
+    public void createCSVFile(String filename) {
+        try {
+            File myObj = new File("E:\\BRIDGE_FELLOWSHIP\\AddressBook\\MultipleAddressBook\\" + filename + ".csv");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+
+
+                try {
+                    FileWriter myWriter = new FileWriter("E:\\BRIDGE_FELLOWSHIP\\AddressBook\\MultipleAddressBook\\" + filename + ".csv");
+                    myWriter.write(HEADINGS);
+                    myWriter.close();
+                    System.out.println("Successfully wrote to the file.");
+                } catch (IOException e) {
+                    System.out.println("An error occurred.");
+                    e.printStackTrace();
+                }
+
+
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    public void openCsvFilesList() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n" + "!!! You Can Opened Any Address Book !!!");
+        System.out.println("\nAll AddressBook List");
+        File file = new File("E:\\BRIDGE_FELLOWSHIP\\AddressBook\\MultipleAddressBook\\");
+        File[] filelist = file.listFiles();
+        for (File f : filelist) {
+            if (f.getName().contains(".csv")) //To get only CSV files
+                System.out.println(f.getName());
+        }
+
+        System.out.println("\nEnter the Addressbook to open");
+        String bookname = scanner.nextLine();
+        boolean filefound = false;
+        for (File f : filelist) {
+            if (f.getName().equals(bookname)) {
+                filefound = true;
+                System.out.println("[" + f.getName() + " is Opened ]");
+                displayCSV();
+            }
+        }
+        if (filefound == false) {
+            System.out.println("\n!! File Not found.First Create it !!");
+        }
+
+    }
+
+    public void displayCSV() throws IOException {
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Which Book want to read");
+            String read = sc.nextLine();
+            List<String> lines = Files.readAllLines(Paths.get("E:\\BRIDGE_FELLOWSHIP\\AddressBook\\MultipleAddressBook\\" + read + ".csv"));
+            for (String data : lines) {
+                System.out.println(data);
+            }
+        } catch (Exception e) {
+            System.out.println("No data found");
+            e.printStackTrace();
+        }
+    }
+
+    public void writeToFile(String personDetails) {
+        try {
+            FileWriter myWriter = new FileWriter("E:\\BRIDGE_FELLOWSHIP\\AddressBook\\MultipleAddressBook" + filename + ".csv", true);
+
+            myWriter.write(personDetails);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+
+    }
 
     /* UC6: Add Multiple AddressBook*/
     private void createNewAddressBook() {
@@ -25,6 +116,7 @@ public class AddressBook {
         System.out.println("Address Book Is Created :" + stackofaddressbook.toString());
 
     }
+
 
     public void displayAddressBookList() {
         System.out.println("\nAll AddressBook List");
@@ -47,35 +139,42 @@ public class AddressBook {
 
     /*UC2: Add Person Details In AddressBook*/
     public void addPerson() {
-        sc = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("WELCOME TO ADDPERSON_OPERATION");
+
         System.out.println("\nEnter the FirstName");
-        String firstname = sc.nextLine();
+        String firstname = scanner.nextLine();
         duplicateNameCheck(firstname);
 
         System.out.println("Enter the LastName");
-        String lastname = sc.nextLine();
+        String lastname = scanner.nextLine();
 
         System.out.println("Enter the Contact");
-        String contactno = sc.nextLine();
+        String contactno = scanner.nextLine();
 
         System.out.println("Enter the Emailid");
-        String emailid = sc.nextLine();
+        String emailid = scanner.nextLine();
 
         System.out.println("Enter the Address");
-        String address = sc.nextLine();
+        String address = scanner.nextLine();
 
         System.out.println("Enter the city");
-        String city = sc.nextLine();
+        String city = scanner.nextLine();
 
         System.out.println("Enter the state");
-        String state = sc.nextLine();
+        String state = scanner.nextLine();
 
         System.out.println("Enter the zip");
-        String zip = sc.nextLine();
+        String zip = scanner.nextLine();
 
-        Person p = new Person(firstname, lastname, contactno, emailid, address, city, state, zip);
-        addressbooklist.add(p);
-        System.out.println("AddressBook Data:" + addressbooklist);
+        //Person p = new Person(firstname, lastname, contactno, emailid, address, city, state, zip);
+        //addressbooklist.add(p);
+        writeToFile(personToString(firstname, lastname, contactno, emailid, address, city, state, zip));
+        //System.out.println("AddressBook Data:" + addressbooklist);
+    }
+
+    public String personToString(String firstname, String lastname, String contactno, String emailid, String address, String city, String state, String zip) {
+        return "\n" + firstname + "," + lastname + "," + contactno + "," + emailid + "," + address + "," + city + "," + state + "," + zip;
     }
 
     /* UC7: To Check Duplicate Name Is Present */
@@ -251,11 +350,17 @@ public class AddressBook {
             int choice = sc.nextInt();
             switch (choice) {
                 case 1:
-                    addressBook.createNewAddressBook();
+                    //addressBook.createNewAddressBook();
+                    System.out.println("Enter the AddressBook Name To Create");
+                    do {
+                        filename = sc.nextLine();
+                    } while (filename.isEmpty());
+                    addressBook.createCSVFile(filename);
                     break;
 
                 case 2:
-                    addressBook.openAddressBook();
+                    // addressBook.openAddressBook();
+                    addressBook.openCsvFilesList();
                     int loop1 = 1;
                     while (loop1 == 1) {
                         System.out.println("\nADD PERSON DETAILS");
@@ -273,7 +378,6 @@ public class AddressBook {
                         int ch1 = sc.nextInt();
                         switch (ch1) {
                             case 1:
-                                System.out.println("WELCOME TO ADDPERSON_OPERATION");
                                 addressBook.addPerson();
                                 break;
 
@@ -289,7 +393,7 @@ public class AddressBook {
 
                             case 4:
                                 System.out.println("WELCOME TO DISPLAY");
-                                addressBook.Display();
+                                addressBook.displayCSV();
                                 break;
 
                             case 5:
